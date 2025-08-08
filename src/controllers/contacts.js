@@ -1,6 +1,7 @@
-import { getAllContacts, getContactById } from "../services/contacts.js";
+import { createContact, deleteContact, getAllContacts, getContactById, updateContact } from "../services/contacts.js";
+import httpError from 'http-errors';
 
-    export async function getAllContactsController(request, response) {
+    export async function getAllContactsController(request, response, next) {
         const contacts = await getAllContacts();
 
         response.json({
@@ -10,14 +11,12 @@ import { getAllContacts, getContactById } from "../services/contacts.js";
         });
     };
    
-    export async function getContactByIdController(request, response) {
+    export async function getContactByIdController(request, response, next) {
         const { contactId } = request.params;
         const contact = await getContactById(contactId);
 
         if (!contact) {
-            response.status(404).json({
-                message: 'Contact not found',
-            });
+            return next(httpError(404, 'Contact not found'));
         }
 
         response.json({
@@ -25,4 +24,40 @@ import { getAllContacts, getContactById } from "../services/contacts.js";
             message: `Successfully found contact with id ${contactId}`,
             data: contact,
         });
+    };
+
+    export async function createContactController(request, response, next) {
+        const createdContact = await createContact(request.body);
+
+        response.status(201).json({
+            status: 201,
+            message: 'Successfully created a contact',
+            data: createdContact,
+        });
+    };
+
+    export async function updateContactController(request, response, next) {
+        const { contactId } = request.params;
+        const updatedContact = await updateContact(contactId, request.body);
+
+        if(!updatedContact) {
+            return next(httpError(404, 'Contact not found'));
+        }
+
+        response.json({
+            status: 200,
+            message: 'Successfully patched a contact',
+            data: updatedContact,
+        });
+    };
+
+    export async function deleteContactController(request, response, next) {
+        const { contactId } = request.params;
+        const contactToDelete = await deleteContact(contactId);
+
+        if(!contactToDelete) {
+            return next(httpError(404, 'Contact not found'));
+        };
+
+        response.status(204).send();
     };
