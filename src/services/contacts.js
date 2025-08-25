@@ -14,7 +14,7 @@ export async function getAllContacts(options = {}) {
   const perPageNumber = Math.min(100, Math.max(1, Number(perPage) || 10));
   const skip = (pageNumber - 1) * perPageNumber;
 
-  const filter  = {};
+  const filter = {};
   if (typeof type !== 'undefined' && type !== '') {
     filter.contactType = type;
   }
@@ -23,7 +23,7 @@ export async function getAllContacts(options = {}) {
     filter.isFavourite = isFavourite;
   }
 
-  const sort = { [sortBy]: sortOrder.toLowerCase() === "desc" ? -1 : 1 };
+  const sort = { [sortBy]: sortOrder.toLowerCase() === 'desc' ? -1 : 1 };
 
   const [items, totalItems] = await Promise.all([
     contactsCollection.find(filter).sort(sort).skip(skip).limit(perPageNumber),

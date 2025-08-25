@@ -15,7 +15,11 @@ import validateQuery from '../middlewares/validateQuery.js';
 
 const contactsRouter = Router();
 
-contactsRouter.get('/contacts', validateQuery, ctrlWrapper(getAllContactsController));
+contactsRouter.get(
+  '/contacts',
+  validateQuery,
+  ctrlWrapper(getAllContactsController),
+);
 
 contactsRouter.get(
   '/contacts/:contactId',
@@ -23,9 +27,11 @@ contactsRouter.get(
   ctrlWrapper(getContactByIdController),
 );
 
-contactsRouter.post('/contacts',
+contactsRouter.post(
+  '/contacts',
   validateBody(createContactSchema),
-  ctrlWrapper(createContactController));
+  ctrlWrapper(createContactController),
+);
 
 contactsRouter.patch(
   '/contacts/:contactId',
