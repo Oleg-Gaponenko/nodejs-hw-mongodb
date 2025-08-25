@@ -8,7 +8,7 @@ import {
 import httpError from 'http-errors';
 
 export async function getAllContactsController(request, response, next) {
-  const contacts = await getAllContacts();
+  const contacts = await getAllContacts(request.query);
 
   response.json({
     status: 200,

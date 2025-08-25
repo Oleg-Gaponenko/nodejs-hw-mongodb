@@ -1,5 +1,3 @@
-// додано відповідно до вимог техзавдання
-
 export const ctrlWrapper = (controller) => {
   return async (request, response, next) => {
     try {
