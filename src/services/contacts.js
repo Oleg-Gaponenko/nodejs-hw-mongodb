@@ -1,6 +1,6 @@
 import { contactsCollection } from '../db/models/contact.js';
 
-export async function getAllContacts(options = {}) {
+export async function getAllContacts(options = {}, userId) {
   const {
     page = 1,
     perPage = 10,
@@ -14,12 +14,12 @@ export async function getAllContacts(options = {}) {
   const perPageNumber = Math.min(100, Math.max(1, Number(perPage) || 10));
   const skip = (pageNumber - 1) * perPageNumber;
 
-  const filter = {};
+  const filter = {userId};
   if (typeof type !== 'undefined' && type !== '') {
     filter.contactType = type;
   }
 
-  if (typeof isFavourite !== 'undefined') {
+  if (Object.prototype.hasOwnProperty.call(options, 'isFavourite')) {
     filter.isFavourite = isFavourite;
   }
 
@@ -43,26 +43,34 @@ export async function getAllContacts(options = {}) {
   };
 }
 
-export async function getContactById(contactId) {
-  const contact = await contactsCollection.findById(contactId);
+export async function getContactById(contactId, userId) {
+  const contact = await contactsCollection.findOne({ _id: contactId, userId });
   return contact;
 }
 
-export async function createContact(contactData) {
-  const createdContact = await contactsCollection.create(contactData);
+export async function createContact(contactData, userId) {
+  const createdContact = await contactsCollection.create({ ...contactData, userId });
   return createdContact;
 }
 
-export async function updateContact(contactId, dataToUpdate) {
-  const updatedContact = await contactsCollection.findByIdAndUpdate(
-    contactId,
-    dataToUpdate,
+export async function updateContact(contactId, dataToUpdate, userId) {
+    const update = { ...dataToUpdate };
+
+  if (Object.prototype.hasOwnProperty.call(update, 'userId')) {
+    delete update.userId;
+  }
+
+
+  const updatedContact = await contactsCollection.findOneAndUpdate(
+    {_id: contactId, userId},
+    update,
     { new: true },
   );
+
   return updatedContact;
 }
 
-export async function deleteContact(contactId) {
-  const outcome = await contactsCollection.findByIdAndDelete(contactId);
+export async function deleteContact(contactId, userId) {
+  const outcome = await contactsCollection.findOneAndDelete({ _id: contactId, userId});
   return outcome;
 }

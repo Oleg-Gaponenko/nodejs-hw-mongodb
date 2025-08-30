@@ -15,12 +15,16 @@ const sessions = new Schema ({
     },
     accessTokenValidUntil: {
         type: Date,
-        requred: true,
+        required: true,
     },
     refreshTokenValidUntil: {
         type: Date,
-        requred: true,
+        required: true,
     },
-});
+},
+    {
+        timestamps: true,
+        versionKey: false,
+    },);
 
 export const sessionsCollection = model('sessions', sessions);

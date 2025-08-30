@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import contactsRouter from './routers/contacts.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
 import errorHandler from './middlewares/errorHandler.js';
+import authRouter from './routers/auth.js';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -24,7 +26,10 @@ export default function setupServer() {
     }),
   );
 
-  app.use(contactsRouter);
+  app.use(cookieParser());
+
+  app.use('/auth', authRouter);
+  app.use('/contacts', contactsRouter);
 
   app.use('/', notFoundHandler);
   app.use(errorHandler);

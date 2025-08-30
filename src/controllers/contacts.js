@@ -8,7 +8,8 @@ import {
 import httpError from 'http-errors';
 
 export async function getAllContactsController(request, response, next) {
-  const contacts = await getAllContacts(request.query);
+  const userId = request.user._id;
+  const contacts = await getAllContacts(request.query, userId);
 
   response.json({
     status: 200,
@@ -18,8 +19,9 @@ export async function getAllContactsController(request, response, next) {
 }
 
 export async function getContactByIdController(request, response, next) {
+  const userId = request.user._id;
   const { contactId } = request.params;
-  const contact = await getContactById(contactId);
+  const contact = await getContactById(contactId, userId);
 
   if (!contact) {
     return next(httpError(404, 'Contact not found'));
@@ -33,7 +35,8 @@ export async function getContactByIdController(request, response, next) {
 }
 
 export async function createContactController(request, response, next) {
-  const createdContact = await createContact(request.body);
+  const userId = request.user._id;
+  const createdContact = await createContact(request.body, userId);
 
   response.status(201).json({
     status: 201,
@@ -43,8 +46,9 @@ export async function createContactController(request, response, next) {
 }
 
 export async function updateContactController(request, response, next) {
+  const userId = request.user._id;
   const { contactId } = request.params;
-  const updatedContact = await updateContact(contactId, request.body);
+  const updatedContact = await updateContact(contactId, request.body, userId);
 
   if (!updatedContact) {
     return next(httpError(404, 'Contact not found'));
@@ -58,8 +62,9 @@ export async function updateContactController(request, response, next) {
 }
 
 export async function deleteContactController(request, response, next) {
+  const userId = request.user._id;
   const { contactId } = request.params;
-  const contactToDelete = await deleteContact(contactId);
+  const contactToDelete = await deleteContact(contactId, userId);
 
   if (!contactToDelete) {
     return next(httpError(404, 'Contact not found'));
