@@ -1,5 +1,5 @@
 import { THIRTY_DAYS } from "../constants/index.js";
-import { logInUser, logOutUser, refreshSession, registerNewUser } from "../services/auth.js";
+import { logInUser, logOutUser, refreshSession, registerNewUser, resetEmail, resetPassword } from "../services/auth.js";
 
 
 const baseCookieData = {
@@ -58,4 +58,27 @@ export async function logOutUserController (request, response, next) {
         .clearCookie('refreshToken', {path: '/'})
         .clearCookie('sessionId', {path: '/'})
         .status(204).send();
+};
+
+export async function resetEmailController (request, response, next) {
+    await resetEmail({email: request.body.email});
+
+    response.status(200).json({
+        status: 200,
+        message: 'Reset password email has been successfully sent.',
+        data: {},
+    });
+};
+
+export async function resetPasswordController (request, response, next) {
+    await resetPassword({
+        token: request.body.token,
+        password: request.body.password,
+    });
+
+    response.status(200).json({
+        status: 200,
+        message: 'Password has been successfully reset.',
+        data: {},
+    });
 };
