@@ -6,6 +6,7 @@ import {
   updateContact,
 } from '../services/contacts.js';
 import httpError from 'http-errors';
+import { saveFileToCloudinary } from '../utils/saveFileToCloudinary.js';
 
 export async function getAllContactsController(request, response, next) {
   const userId = request.user._id;
@@ -36,7 +37,18 @@ export async function getContactByIdController(request, response, next) {
 
 export async function createContactController(request, response, next) {
   const userId = request.user._id;
-  const createdContact = await createContact(request.body, userId);
+  let photoLink;
+
+  if (request.file) {
+    photoLink = await saveFileToCloudinary(request.file, {
+      folder: `${process.env.CLOUDINARY_FOLDER || 'images'}/${userId}`,
+    });
+  }
+
+  const createdContact = await createContact(
+    { ...request.body, ...(photoLink ? { photo: photoLink } : {}) },
+    userId,
+  );
 
   response.status(201).json({
     status: 201,
@@ -48,7 +60,19 @@ export async function createContactController(request, response, next) {
 export async function updateContactController(request, response, next) {
   const userId = request.user._id;
   const { contactId } = request.params;
-  const updatedContact = await updateContact(contactId, request.body, userId);
+  let photoLink;
+
+  if (request.file) {
+    photoLink = await saveFileToCloudinary(request.file, {
+      folder: `${process.env.CLOUDINARY_FOLDER || 'images'}/${userId}`,
+    });
+  }
+
+  const updatedContact = await updateContact(
+    contactId,
+    { ...request.body, ...(photoLink ? { photo: photoLink } : {}) },
+    userId,
+  );
 
   if (!updatedContact) {
     return next(httpError(404, 'Contact not found'));
