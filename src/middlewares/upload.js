@@ -27,5 +27,5 @@ function photoFilter(request, file, callback) {
 export const upload = multer({
   storage: photoStorage,
   fileFilter: photoFilter,
-  limits: { fileSize: 6 * 1024 * 1024 },
+  limits: { fileSize: 16 * 1024 * 1024 },
 });
