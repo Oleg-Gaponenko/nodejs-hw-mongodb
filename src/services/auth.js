@@ -112,7 +112,7 @@ export async function resetEmail({ email }) {
              <p>Or copy and paste this URL into your browser:</p>
              <p>${link}</p>
   `,
-      text: 'Please click the link above to reset your password',
+      text: `Please click the link to reset your password: ${link}`,
     });
   } catch {
     throw httpError(500, 'Failed to send the email, please try again later.');
