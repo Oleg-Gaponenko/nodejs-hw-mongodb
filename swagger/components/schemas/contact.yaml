@@ -1,0 +1,52 @@
+type: object
+required:
+  - _id
+  - name
+  - phoneNumber
+  - contactType
+  - userId
+  - createdAt
+  - updatedAt
+properties:
+  _id:
+    type: string
+    description: Mongo ObjectId
+    example: '66f0b6f0c4f3a21d8a6c9f01'
+  name:
+    type: string
+    minLength: 3
+    maxLength: 20
+    example: 'Green Arrow'
+  phoneNumber:
+    type: string
+    minLength: 3
+    maxLength: 20
+    example: '+380951112233'
+  email:
+    type: string
+    minLength: 3
+    maxLength: 20
+    example: 'arrow@mail.com'
+  isFavourite:
+    type: boolean
+    default: false
+  contactType:
+    type: string
+    enum: [work, home, personal]
+    default: personal
+  userId:
+    type: string
+    description: ObjectId of a user
+    example: '66f0b6f0c4f3a21d8a6c9e55'
+  photo:
+    type: string
+    description: URL Cloudinary
+    example: 'https://res.cloudinary.com/dk3rubwon/image/upload/v1756854772/images/68b757f3cf5af6d9d4b6c015/olvalxrxi76vugtt4ul8.jpg'
+  createdAt:
+    type: string
+    format: date-time
+    example: '2025-09-02T22:38:51.848+00:00'
+  updatedAt:
+    type: string
+    format: date-time
+    example: '2025-09-02T22:38:51.848+00:00'

@@ -1,0 +1,32 @@
+type: object
+required:
+  - name
+  - phoneNumber
+  - contactType
+properties:
+  name:
+    type: string
+    minLength: 3
+    maxLength: 20
+    example: 'Green Arrow'
+  phoneNumber:
+    type: string
+    minLength: 3
+    maxLength: 20
+    example: '+380951112233'
+  email:
+    type: string
+    minLength: 3
+    maxLength: 20
+    example: 'arrow@mail.com'
+  isFavourite:
+    type: boolean
+    example: true
+  contactType:
+    type: string
+    enum: [personal, home, work]
+    example: personal
+  photo:
+    type: string
+    format: uri
+    example: 'https://res.cloudinary.com/dk3rubwon/image/upload/v1756854772/images/68b757f3cf5af6d9d4b6c015/olvalxrxi76vugtt4ul8.jpg'
